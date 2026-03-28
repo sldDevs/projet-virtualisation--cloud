@@ -1,0 +1,9 @@
+# Vagrant
+.vagrant/
+
+# Fichiers de log et temporaires
+*.log
+vagrant_ssh_config
+.DS_Store
+actions-runner/
+*.gz

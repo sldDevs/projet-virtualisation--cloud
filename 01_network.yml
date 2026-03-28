@@ -1,0 +1,24 @@
+---
+- name: Configuration Reseau Permanente
+  hosts: webserver, dbserver
+  become: yes
+  tasks:
+    - name: Appliquer la configuration Netplan (eth1)
+      copy:
+        dest: /etc/netplan/60-ansible-config.yaml
+        content: |
+          network:
+            version: 2
+            renderer: networkd
+            ethernets:
+              eth1:
+                addresses:
+                  - "{{ custom_ip }}/24"
+                routes:
+                  - to: default
+                    via: "{{ gateway_ip }}"
+                nameservers:
+                  addresses: [8.8.8.8, 1.1.1.1]
+
+    - name: Appliquer la nouvelle configuration
+      shell: netplan apply

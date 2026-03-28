@@ -1,0 +1,21 @@
+name: CI/CD Infrastructure Virtualisation
+
+on:
+  push:
+    branches: [ main, master ] # Déclenche le pipeline à chaque push
+
+jobs:
+  ansible-deployment:
+    runs-on: self-hosted # Utilise ton runner "firewall-runner"
+    
+    steps:
+      - name: Recuperation du code du depot
+        uses: actions/checkout@v4
+
+      - name: Configuration du Firewall (NAT et Routage)
+        run: |
+          ansible-playbook -i inventory.ini 02_firewall_nat.yml
+
+      - name: Installation des Services (Web et Database)
+        run: |
+          ansible-playbook -i inventory.ini 03_services.yml
