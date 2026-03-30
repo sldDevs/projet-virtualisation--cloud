@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projet Virtualisation et Cloud</title>
+    <style>
+        /* --- Styles Généraux --- */
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --accent: #38bdf8; /* Bleu clair */
+            --success: #10b981; /* Vert */
+            --border: #334155;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* --- En-tête --- */
+        header {
+            text-align: center;
+            padding: 40px 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 40px;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 10px;
+        }
+
+        header h1 span {
+            color: var(--accent);
+        }
+
+        header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* --- Conteneur Principal --- */
+        main {
+            flex: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* --- Carte de Statut --- */
+        .status-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .status-icon {
+            font-size: 4rem;
+            color: var(--success);
+            margin-bottom: 15px;
+        }
+
+        .status-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .status-desc {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* --- Grille d'Infos --- */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .info-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+        }
+
+        .info-card h3 {
+            font-size: 1.3rem;
+            color: var(--accent);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-card ul {
+            list-style: none;
+            color: var(--text-secondary);
+        }
+
+        .info-card li {
+            margin-bottom: 8px;
+            padding-left: 15px;
+            position: relative;
+        }
+
+        .info-card li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+        }
+
+        /* --- Pied de page --- */
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border);
+            margin-top: 40px;
+        }
+
+        /* --- Icônes Simple (Utilisation de caractères Unicode pour la simplicité) --- */
+        .icon {
+            font-style: normal;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Dashboard du <span>Projet</span></h1>
+        <p>Projet de Fin de Module - Virtualisation & Cloud</p>
+    </header>
+
+    <main>
+        <div class="status-card">
+            <div class="status-icon">✓</div>
+            <div class="status-title">PROJET TERMINÉ AVEC SUCCÈS</div>
+            <p class="status-desc">
+                Le pipeline CI/CD final, incluant la configuration du réseau (NAT/Firewall) et le déploiement automatique des services, s'est exécuté sans erreur. Cette page est la preuve concrète du succès de l'automatisation.
+            </p>
+        </div>
+
+        <div class="info-grid">
+            <div class="info-card">
+                <h3><i class="icon">🌐</i> Architecture Réseau</h3>
+                <ul>
+                    <li>Segment DMZ (Web) : 192.168.100.0/24</li>
+                    <li>Segment LAN (BD) : 192.168.10.0/24</li>
+                    <li>Firewall : Routage & NAT (iptables)</li>
+                    <li>Filtrage : Ping autorisé, SQL bloqué.</li>
+                </ul>
+            </div>
+
+            <div class="info-card">
+                <h3><i class="icon">🛠️</i> Outils IaC</h3>
+                <ul>
+                    <li>Vagrant : Provisionnement des VMs</li>
+                    <li>Ansible : Configuration sélective</li>
+                    <li>Netplan : Persistance réseau</li>
+                    <li>Handler : Redémarrage des services</li>
+                </ul>
+            </div>
+
+            <div class="info-card">
+                <h3><i class="icon">🔄</i> Pipeline GitHub</h3>
+                <ul>
+                    <li>Déclencheur : Git Push (main)</li>
+                    <li>Runner : Self-Hosted (Firewall)</li>
+                    <li>Jobs : 2 (Réseau & Services)</li>
+                    <li>Validation : Témoin vert GitHub</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>Déployé par Ansible - Saliou DIOP © 2026</p>
+    </footer>
+
+</body>
+</html>

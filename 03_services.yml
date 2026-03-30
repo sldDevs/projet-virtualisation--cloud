@@ -11,10 +11,14 @@
         update_cache: yes
       when: inventory_hostname == '192.168.100.10'
 
-    - name: Page d'accueil personnalisee
+    - name: Déploiement du site moderne (Dashboard)
       copy:
-        content: "<h1>PROJET TERMINE AVEC SUCCES : Pipeline final avec NAT et Services Ajoute.</h1><p>Deploye par Ansible - Architecture IaC.</p>"
+        # Assure-toi que le fichier index.html est dans le même dossier que ce playbook
+        src: index.html 
         dest: /var/www/html/index.html
+        owner: www-data
+        group: www-data
+        mode: '0644'
       when: inventory_hostname == '192.168.100.10'
 
     # --- CONFIGURATION DBSERVER ---
@@ -22,7 +26,7 @@
       apt:
         name: 
           - mariadb-server
-          - python3-pymysql  # INDISPENSABLE pour le module mysql_user
+          - python3-pymysql
         state: present
         update_cache: yes
       when: inventory_hostname == '192.168.10.10'
@@ -42,7 +46,7 @@
         priv: '*.*:ALL'
         host: '%'
         state: present
-        login_unix_socket: /var/run/mysqld/mysqld.sock # Permet à Ansible de se connecter sans mot de passe root via le socket
+        login_unix_socket: /var/run/mysqld/mysqld.sock
       when: inventory_hostname == '192.168.10.10'
 
   handlers:
