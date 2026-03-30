@@ -1,24 +1,47 @@
 ---
+
 - name: Installation des Services Web et Base de Donnees
+
   hosts: all
+
   become: yes
+
   tasks:
+
     - name: Installation Apache sur le Webserver
+
       apt:
+
         name: apache2
+
         state: present
+
         update_cache: no
+
       when: inventory_hostname == '192.168.100.10'
+
+
 
     - name: Page d'accueil personnalisee
+
       copy:
+
         content: "<h1>PROJET TERMINE AVEC SUCCES : Pipeline final avec NAT et Services Ajoute.</h1><p>Deploye par Ansible - Architecture IaC.</p>"
+
         dest: /var/www/html/index.html
+
       when: inventory_hostname == '192.168.100.10'
 
+
+
     - name: Installation MariaDB sur le DBServer
+
       apt:
+
         name: mariadb-server
+
         state: present
+
         update_cache: no
+
       when: inventory_hostname == '192.168.10.10'
