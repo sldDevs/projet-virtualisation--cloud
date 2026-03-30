@@ -3,12 +3,11 @@
   hosts: all
   become: yes
   tasks:
-    # --- CONFIGURATION WEBSERVER ---
     - name: Installation Apache sur le Webserver
       apt:
         name: apache2
         state: present
-        update_cache: yes
+        update_cache: no
       when: inventory_hostname == '192.168.100.10'
 
     - name: Page d'accueil personnalisee
@@ -17,36 +16,9 @@
         dest: /var/www/html/index.html
       when: inventory_hostname == '192.168.100.10'
 
-    # --- CONFIGURATION DBSERVER ---
-    - name: Installation MariaDB et dépendances Python
+    - name: Installation MariaDB sur le DBServer
       apt:
-        name: 
-          - mariadb-server
-          - python3-pymysql  # INDISPENSABLE pour le module mysql_user
+        name: mariadb-server
         state: present
-        update_cache: yes
+        update_cache: no
       when: inventory_hostname == '192.168.10.10'
-
-    - name: S'assurer que MariaDB écoute sur toutes les interfaces
-      lineinfile:
-        path: /etc/mysql/mariadb.conf.d/50-server.cnf
-        regexp: '^bind-address'
-        line: 'bind-address = 0.0.0.0'
-      when: inventory_hostname == '192.168.10.10'
-      notify: Restart MariaDB
-
-    - name: Créer l'utilisateur vagrant pour l'accès distant
-      mysql_user:
-        name: vagrant
-        password: "passer"
-        priv: '*.*:ALL'
-        host: '%'
-        state: present
-        login_unix_socket: /var/run/mysqld/mysqld.sock # Permet à Ansible de se connecter sans mot de passe root via le socket
-      when: inventory_hostname == '192.168.10.10'
-
-  handlers:
-    - name: Restart MariaDB
-      service:
-        name: mariadb
-        state: restarted
