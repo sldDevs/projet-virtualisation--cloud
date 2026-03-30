@@ -12,7 +12,7 @@
 
     - name: Page d'accueil personnalisee
       copy:
-        content: "<h1>PROJET TERMINE AVEC SUCCES: Pipeline final avec NAT et Services Ajoute.</h1><p>Deploye par Ansible - Architecture IaC.</p>"
+        content: "<h1>PROJET TERMINE AVEC SUCCES : Pipeline final avec NAT et Services Ajoute.</h1><p>Deploye par Ansible - Architecture IaC.</p>"
         dest: /var/www/html/index.html
       when: inventory_hostname == '192.168.100.10'
 
