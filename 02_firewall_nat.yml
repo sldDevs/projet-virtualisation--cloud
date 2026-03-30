@@ -35,3 +35,10 @@
         protocol: tcp
         destination_port: 80
         jump: MASQUERADE
+        
+    - name: BLOQUER l'accès du Webserver vers la DB
+      iptables:
+        chain: FORWARD
+        source: 192.168.100.10      # IP du Webserver
+        destination: 192.168.10.10  # IP du DBserver
+        jump: DROP
