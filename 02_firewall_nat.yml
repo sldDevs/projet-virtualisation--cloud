@@ -35,10 +35,18 @@
         protocol: tcp
         destination_port: 80
         jump: MASQUERADE
-        
-    - name: BLOQUER l'accès du Webserver vers la DB
+
+    - name: Autoriser explicitement le PING (ICMP) vers la DB
       iptables:
         chain: FORWARD
-        source: 192.168.100.10      # IP du Webserver
-        destination: 192.168.10.10  # IP du DBserver
+        protocol: icmp
+        source: 192.168.100.10
+        destination: 192.168.10.10
+        jump: ACCEPT
+
+    - name: Bloquer tout autre trafic (TCP/UDP) du Web vers la DB
+      iptables:
+        chain: FORWARD
+        source: 192.168.100.10
+        destination: 192.168.10.10
         jump: DROP
