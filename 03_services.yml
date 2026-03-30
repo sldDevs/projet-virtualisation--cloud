@@ -22,3 +22,11 @@
         state: present
         update_cache: no
       when: inventory_hostname == '192.168.10.10'
+    - name: Créer l'utilisateur vagrant pour l'accès distant
+      mysql_user:
+        name: vagrant
+        password: "votre_mot_de_passe"
+        priv: '*.*:ALL'
+        host: '%'
+        state: present
+      when: inventory_hostname == '192.168.10.10'
