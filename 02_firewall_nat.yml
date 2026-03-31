@@ -3,15 +3,14 @@
   hosts: firewall
   become: yes
   tasks:
-    - name: Activer l'IP Forwarding dans le noyau
+    - name: Activer l'IP Forwarding dans le noyau.
       sysctl:
         name: net.ipv4.ip_forward
         value: '1'
         state: present
         reload: yes
 
-    # --- NAT ET REDIRECTIONS ---
-    - name: DNAT - Redirection du port 80 vers le Webserver
+    - name: DNAT - Redirection du port 80 vers le Webserver.
       iptables:
         table: nat
         chain: PREROUTING
@@ -28,29 +27,26 @@
         out_interface: eth0
         jump: MASQUERADE
 
-    # --- SÉCURITÉ GRANULAIRE (FORWARD) ---
-
-    # 1. AUTORISER LE RETOUR DE PAQUET (Crucial pour le ping)
-    - name: Autoriser le trafic de retour (ESTABLISHED)
+    - name: SNAT - Masquerade Interne (Pour le retour des paquets vers Windows)
       iptables:
-        chain: FORWARD
-        ctstate: ESTABLISHED,RELATED
-        jump: ACCEPT
+        table: nat
+        chain: POSTROUTING
+        destination: 192.168.100.10
+        protocol: tcp
+        destination_port: 80
+        jump: MASQUERADE
 
-    # 2. AUTORISER LE DÉPART DU PING DEPUIS LA DB
-    - name: Autoriser le DBserver à pinger le Webserver
+    - name: Autoriser explicitement le PING (ICMP) vers la DB
       iptables:
         chain: FORWARD
         protocol: icmp
-        source: 192.168.10.10
-        destination: 192.168.100.10
+        source: 192.168.100.10
+        destination: 192.168.10.10
         jump: ACCEPT
 
-    # 3. BLOQUER TOUT LE RESTE VENANT DU WEB
-    - name: Bloquer toute nouvelle connexion venant du Web vers la DB
+    - name: Bloquer tout autre trafic (TCP/UDP) du Web vers la DB
       iptables:
         chain: FORWARD
-        ctstate: NEW
         source: 192.168.100.10
         destination: 192.168.10.10
         jump: DROP
