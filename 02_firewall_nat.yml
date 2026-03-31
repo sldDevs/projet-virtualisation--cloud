@@ -36,14 +36,6 @@
         destination_port: 80
         jump: MASQUERADE
 
-    - name: Autoriser explicitement le PING (ICMP) vers la DB
-      iptables:
-        chain: FORWARD
-        protocol: icmp
-        source: 192.168.100.10
-        destination: 192.168.10.10
-        jump: ACCEPT
-
     - name: Bloquer tout autre trafic (TCP/UDP) du Web vers la DB
       iptables:
         chain: FORWARD
