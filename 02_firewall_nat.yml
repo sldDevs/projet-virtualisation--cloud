@@ -1,31 +1,74 @@
 ---
 - name: Configuration du Routage et NAT
+
   hosts: firewall
+
   become: yes
+
   tasks:
-    - name: Activer l'IP Forwarding dans le noyau
+
+    - name: Activer l'IP Forwarding dans le noyau.
+
       sysctl:
+
         name: net.ipv4.ip_forward
+
         value: '1'
+
         state: present
+
         reload: yes
 
-    # --- NAT ET REDIRECTIONS ---
-    - name: DNAT - Redirection du port 80 vers le Webserver
+
+
+    - name: DNAT - Redirection du port 80 vers le Webserver.
+
       iptables:
+
         table: nat
+
         chain: PREROUTING
+
         in_interface: eth0
+
         protocol: tcp
+
         destination_port: 80
+
         jump: DNAT
+
         to_destination: 192.168.100.10:80
 
+
+
     - name: SNAT - Masquerade vers Internet (eth0)
+
       iptables:
+
         table: nat
+
         chain: POSTROUTING
+
         out_interface: eth0
+
+        jump: MASQUERADE
+
+
+
+    - name: SNAT - Masquerade Interne (Pour le retour des paquets vers Windows)
+
+      iptables:
+
+        table: nat
+
+        chain: POSTROUTING
+
+        destination: 192.168.100.10
+
+        protocol: tcp
+
+        destination_port: 80
+
         jump: MASQUERADE
 
     # --- SÉCURITÉ GRANULAIRE (FORWARD) ---
